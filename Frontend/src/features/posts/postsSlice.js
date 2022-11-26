@@ -1,30 +1,18 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
 import { nanoid } from "@reduxjs/toolkit";
 import { sub } from "date-fns";
 import axios from "axios";
+import { apiStorage } from "../../store/apiStorage";
 
-// const initialState = store.getState();
 const initialState = [
   {
-    id: nanoid(),
-    title: "learning redux",
-    content: "learning redux is fun",
+    _id: "",
+    title: "",
+    content: "",
+    authorID: "",
     date: sub(new Date(), { minutes: 10 }).toISOString(),
     reactions: {
-      thumbsUp: 0,
-      wow: 0,
-      heart: 0,
-      rocket: 0,
-      coffee: 0,
-    },
-  },
-  {
-    id: nanoid(),
-    title: "learning redux2",
-    content: "learning redux is long",
-    date: sub(new Date(), { minutes: 10 }).toISOString(),
-    reactions: {
-      thumbsUp: 0,
+      thumbsup: 0,
       wow: 0,
       heart: 0,
       rocket: 0,
@@ -36,6 +24,13 @@ const postsSlice = createSlice({
   name: "posts",
   initialState,
   reducers: {
+    updatePostList: {
+      reducer(state, action) {
+        action.payload.map((post) => {
+          state.push(post);
+        });
+      },
+    },
     postAdded: {
       reducer(state, action) {
         const postdata = JSON.stringify(action.payload);
@@ -47,20 +42,20 @@ const postsSlice = createSlice({
             },
           })
           .then((res) => {
-            // state.push(action.payload);
-            console.log(res.data);
+            state.push(action.payload);
+            window.alert(res.data);
           });
       },
       prepare(title, content, userid) {
         return {
           payload: {
-            id: nanoid(),
+            _id: nanoid(),
             title,
             content,
             date: new Date().toISOString(),
             userid,
             reactions: {
-              thumbsUp: 0,
+              thumbsup: 0,
               wow: 0,
               heart: 0,
               rocket: 0,
@@ -72,7 +67,7 @@ const postsSlice = createSlice({
     },
     reactionAdded(state, action) {
       const { postid, reaction } = action.payload;
-      const existingPost = state.find((post) => post.id === postid);
+      const existingPost = state.find((post) => post._id === postid);
       if (existingPost) {
         existingPost.reactions[reaction]++;
       }
@@ -81,5 +76,5 @@ const postsSlice = createSlice({
 });
 
 export const selectAllPosts = (state) => state.posts;
-export const { postAdded, reactionAdded } = postsSlice.actions;
+export const { updatePostList, postAdded, reactionAdded } = postsSlice.actions;
 export default postsSlice.reducer;

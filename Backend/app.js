@@ -25,7 +25,7 @@ app.post("/api/addpost", (req, res) => {
     authorID: req.body.userid,
     date: req.body.date,
     reactions: {
-      thumbsup: req.body.reactions.thumbsUp,
+      thumbsup: req.body.reactions.thumbsup,
       wow: req.body.reactions.wow,
       heart: req.body.reactions.heart,
       rocket: req.body.reactions.rocket,

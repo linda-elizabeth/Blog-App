@@ -1,15 +1,9 @@
 import axios from "axios";
 
 export const apiStorage = {
-  getItem: async (key) => {
-    axios
-      .get(`http://localhost:5000/api/posts`)
-      .then((res) => {
-        return res.data;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  getItem: async () => {
+    const res = await axios.get(`http://localhost:5000/api/posts`);
+    return res.data;
   },
 
   setItem: async (key, item) => {

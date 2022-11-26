@@ -1,7 +1,7 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import postsReducer from "../features/posts/postsSlice";
 import usersReducer from "../features/users/usersSlice";
-import hardSet from "redux-persist/lib/stateReconciler/hardSet";
+
 import {
   persistStore,
   persistReducer,
@@ -23,7 +23,6 @@ const persistConfig = {
   key: "root",
   version: 1,
   storage: apiStorage,
-  stateReconciler: hardSet,
 };
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 export const store = configureStore({
