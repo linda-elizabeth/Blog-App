@@ -6,15 +6,6 @@ export const apiStorage = {
     return res.data;
   },
 
-  setItem: async (key, item) => {
-    // axios
-    //   .post(`http://localhost:5000/api/addpost`, key)
-    //   .then((res) => {
-    //     // console.log(res.data);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-  },
+  setItem: async (key, item) => {},
   removeItem: (key) => {},
 };

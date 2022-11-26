@@ -32,6 +32,7 @@ const postsSlice = createSlice({
     },
     postAdded: {
       reducer(state, action) {
+        state.push(action.payload);
         const postdata = JSON.stringify(action.payload);
         axios
           .post(`http://localhost:5000/api/addpost`, postdata, {
@@ -41,8 +42,7 @@ const postsSlice = createSlice({
             },
           })
           .then((res) => {
-            // state.push(action.payload);
-            window.alert(res.data);
+            console.log(res.data);
           });
       },
       prepare(title, content, userid) {
@@ -52,7 +52,7 @@ const postsSlice = createSlice({
             title,
             content,
             date: new Date().toISOString(),
-            userid,
+            authorID: userid,
             reactions: {
               thumbsup: 0,
               wow: 0,
@@ -67,7 +67,9 @@ const postsSlice = createSlice({
     reactionAdded(state, action) {
       const { postid, reaction } = action.payload;
       const existingPost = state.find((post) => post._id === postid);
+
       if (existingPost) {
+        existingPost.reactions[reaction]++;
         axios
           .post(
             `http://localhost:5000/api/addreaction`,
@@ -80,7 +82,6 @@ const postsSlice = createSlice({
             }
           )
           .then((res) => {
-            // existingPost.reactions[reaction]++;
             console.log(res.data);
           })
           .catch((err) => console.log(err));
