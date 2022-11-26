@@ -61,6 +61,16 @@ app.post("/api/addreaction", (req, res) => {
       res.send(err);
     });
 });
+
+if (process.env.NODE_ENV == "production") {
+  const path = require("path");
+  app.get("/", (req, res) => {
+    app.use(express.static(path.resolve(__dirname, "..", "Frontend", "build")));
+    res.sendFile(
+      path.resolve(__dirname, "..", "Frontend", "build", "index.html")
+    );
+  });
+}
 app.listen(port, () => {
   console.log("Server ready at " + port);
 });
