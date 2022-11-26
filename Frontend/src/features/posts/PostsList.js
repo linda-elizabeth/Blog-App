@@ -1,6 +1,6 @@
 // component
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { selectAllPosts, updatePostList } from "./postsSlice";
 import PostAuthor from "./PostAuthor";
 import TimeAgo from "./TimeAgo";
@@ -18,6 +18,7 @@ const PostsList = () => {
       .catch((err) => {
         console.log(err);
       });
+    // eslint-disable-next-line
   }, []);
 
   const posts = useSelector(selectAllPosts);
@@ -27,7 +28,7 @@ const PostsList = () => {
 
   const renderedPosts = orderedPosts
     .filter(function (post) {
-      if (post._id == "") {
+      if (post._id === "") {
         return false;
       }
       return true;

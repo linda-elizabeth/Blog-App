@@ -1,8 +1,7 @@
-import { createSlice, current } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { nanoid } from "@reduxjs/toolkit";
 import { sub } from "date-fns";
 import axios from "axios";
-import { apiStorage } from "../../store/apiStorage";
 
 const initialState = [
   {
@@ -26,7 +25,7 @@ const postsSlice = createSlice({
   reducers: {
     updatePostList: {
       reducer(state, action) {
-        action.payload.map((post) => {
+        action.payload.forEach((post) => {
           state.push(post);
         });
       },
@@ -42,7 +41,7 @@ const postsSlice = createSlice({
             },
           })
           .then((res) => {
-            state.push(action.payload);
+            // state.push(action.payload);
             window.alert(res.data);
           });
       },
@@ -69,7 +68,22 @@ const postsSlice = createSlice({
       const { postid, reaction } = action.payload;
       const existingPost = state.find((post) => post._id === postid);
       if (existingPost) {
-        existingPost.reactions[reaction]++;
+        axios
+          .post(
+            `http://localhost:5000/api/addreaction`,
+            { postid, reaction },
+            {
+              headers: {
+                "Content-Type": "application/json; charset=UTF-8",
+                "Access-Control-Allow-Origin": "*",
+              },
+            }
+          )
+          .then((res) => {
+            // existingPost.reactions[reaction]++;
+            console.log(res.data);
+          })
+          .catch((err) => console.log(err));
       }
     },
   },

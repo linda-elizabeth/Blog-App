@@ -9,7 +9,7 @@ app.use(
     extended: true,
   })
 );
-// VERY IMPORTANT
+
 app.use(express.json());
 const Postdata = require("./models/Postdata");
 
@@ -22,7 +22,7 @@ app.post("/api/addpost", (req, res) => {
   var newpost = {
     title: req.body.title,
     content: req.body.content,
-    authorID: req.body.userid,
+    authorID: req.body.authorID,
     date: req.body.date,
     reactions: {
       thumbsup: req.body.reactions.thumbsup,
@@ -42,7 +42,25 @@ app.post("/api/addpost", (req, res) => {
       console.log(error);
     });
 });
-
+app.post("/api/addreaction", (req, res) => {
+  post_id = req.body.postid;
+  reaction = req.body.reaction;
+  Postdata.findOne({ _id: post_id })
+    .then(function (post) {
+      post.reactions[reaction] = post.reactions[reaction] + 1;
+      post
+        .save()
+        .then(function () {
+          res.status(200).send("Reaction added!");
+        })
+        .catch(function (err) {
+          res.send(err);
+        });
+    })
+    .catch(function (err) {
+      res.send(err);
+    });
+});
 app.listen(port, () => {
   console.log("Server ready at " + port);
 });
